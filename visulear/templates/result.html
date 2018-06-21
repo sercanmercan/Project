@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="result">
+    <h4>{{user.username}}님의 점수는</h4>
+    {% for score in scores %}
+    <h4>Part{{ forloop.counter }} {{score}}점</h4>
+    {% endfor %}
+    <h4>입니다.</h4>
+
+    <a href="/"><button class="btn btn-primary">Go back home</button></a>
+</div>
+{% endblock %}

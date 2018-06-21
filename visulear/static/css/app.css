@@ -1,0 +1,66 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+body > .container {
+    padding-top:48px;
+}
+.small-container {
+    padding-top:30px;
+    width:320px;
+}
+button {
+    cursor:pointer
+}
+h2,
+.navbar-brand {
+    font-family: Comfortaa
+}
+.question-card {
+    border:1px solid #d0d0d0;
+    padding:20px;
+    display:none;
+}
+.question-card.active {
+    display: block;
+}
+.question-card h4 {
+    margin-bottom:20px
+}
+.question-card img {
+    margin-bottom:40px;
+}
+.question-card button {
+    margin-top:20px;
+}
+.question-card input[type=radio] {
+    display:none;
+}
+.question-card input[type=radio] + label {
+    cursor: pointer;
+    display:block;
+    position: relative;
+    padding-left:36px;
+}
+
+.question-card input[type=radio] + label::before {
+    width:20px;
+    height:20px;
+    position: absolute;
+    text-align:center;
+    line-height:20px;
+    font-size:20px;
+    content:'';
+    left:0;
+    top:4px;
+    border:1px solid #007bff;
+    border-radius: 2px;
+    color:#007bff;
+}
+.question-card input[type=radio]:checked + label::before {
+    content:'\2713';
+}
+.result,
+
+}

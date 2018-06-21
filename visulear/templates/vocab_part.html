@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% for Part in Parts %}
+        {% for Question in Part.questions %}
+        <div class="question-card">
+            <h3>{{Part.title}}</h3>
+            <h4>{{ Question.question }}</h4>
+            {% if Question.image %}
+                <img src="{{Question.image.url}}" />
+            {% endif %}
+            <form qid="{{Question.pk}}">
+                {% csrf_token %}
+                <input type="radio" value="1" name="answer" id="answer{{Question.pk}}1"/><label for="answer{{Question.pk}}1">{{ Question.choice1 }}</label>
+                <input type="radio" value="2" name="answer" id="answer{{Question.pk}}2"/><label for="answer{{Question.pk}}2">{{ Question.choice2 }}</label>
+                <input type="radio" value="3" name="answer" id="answer{{Question.pk}}3"/><label for="answer{{Question.pk}}3">{{ Question.choice3 }}</label>
+
+                <button type="button" class="btn-submit-question btn btn-primary">Next</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="waiting"><h4>ê²°ê³¼ë¥¼ ê¸°ë‹¤ë¦¬ëŠ” ì¤‘ì�…ë‹ˆë‹¤...</h4></div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        // ë¬¸ì„œ ë¡œë”© ì™„ë£Œì‹œ ì²«ë²ˆì§¸ ì§ˆë¬¸ë§Œ ë³´ì�´ë�„ë¡� ì²˜ë¦¬
+        $('.question-card').first().addClass('active');
+
+        // ì§ˆë¬¸ì—�ì„œ Next í�´ë¦­ ì‹œ ajaxë¥¼ ì�´ìš©í•´ ì‚¬ìš©ì�� ë‹µë³€ì�„ ì €ì�¥í•˜ê³ , ê·¸ ë‹¤ì�Œ ì§ˆë¬¸ì�„ ë³´ì—¬ì¤€ë‹¤.
+        $('.question-card').on('click', '.btn-submit-question', function(evt){
+            var formData = $(this).closest('form').serialize();
+
+            $.ajax({
+                type:"post",
+                url:"/save/"+$(this).closest('form').attr('qid')+"/",
+                data:formData
+            }).done((result) => {
+                if(result === 'success') {
+                    // ê¸°ì¡´ì—� ë³´ì�´ë�˜ ì§ˆë¬¸ì�„ ì•ˆë³´ì�´ê²Œ ì²˜ë¦¬
+                    $(this).closest('.question-card').removeClass('active');
+                    // ë‹¤ì�Œ ì§ˆë¬¸ì�´ ì�ˆìœ¼ë©´
+                    if($(this).closest('.question-card').next('.question-card').length > 0) {
+                        // ë‹¤ì�Œ ì§ˆë¬¸ì�„ ë³´ì—¬ì¤€ë‹¤.
+                        $(this).closest('.question-card').next('.question-card').addClass('active');
+                    } else {
+                        // ë‹¤ì�Œì§ˆë¬¸ì�´ ì—†ì�„ ê²½ìš° ëŒ€ê¸°í™”ë©´ì�„ ë�„ì›Œì£¼ê³ 
+                        $('.waiting h4').show();
+                        // ì£¼ì†Œë¡œë¶€í„° testset ë²ˆí˜¸ë¥¼ ê°€ì ¸ì™€ì„œ
+                        var testNum = document.location.href.split('/');
+                        testNum = testNum[testNum.length - 2];
+                        // result í™”ë©´ìœ¼ë¡œ ì�´ë�™ì‹œì¼œì¤€ë‹¤.
+                        document.location.href = "/result/" + testNum + "/";
+                    }
+                }
+            })
+        })
+    });
+</script>
+{% endblock %}
